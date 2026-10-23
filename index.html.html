@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>USM_15 · Nishonni tut</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#eaf1fb;--ink:#10224a;--card:#ffffff;--sun:#ffb81f;--tur:#12a89a;--muted:#5a6a8c;--miss:#e5484d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1630;--ink:#eaf1fb;--card:#16264d;--muted:#9fb0d4}}
+:root[data-theme="dark"]{--bg:#0c1630;--ink:#eaf1fb;--card:#16264d;--muted:#9fb0d4}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;display:flex;justify-content:center}
+main{width:100%;max-width:460px;padding:18px 16px 28px}
+h1{font-family:'Unbounded',system-ui,sans-serif;font-weight:800;font-size:clamp(26px,8vw,34px);line-height:1.1;margin:6px 0 4px}
+.sub{color:var(--muted);margin:0 0 14px;font-weight:500;font-size:15px}
+.bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--card);border-radius:14px;padding:9px 10px}
+.stat b{display:block;font-family:'Unbounded',system-ui,sans-serif;font-size:19px}
+.stat span{font-size:12px;color:var(--muted)}
+#arena{position:relative;height:min(58vh,430px);background:var(--card);border-radius:22px;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;
+background-image:radial-gradient(circle at 20% 20%,rgba(18,168,154,.12),transparent 45%),radial-gradient(circle at 85% 80%,rgba(255,184,31,.16),transparent 45%)}
+#arena.shake{animation:sh .35s}
+@keyframes sh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+#t{position:absolute;border:0;border-radius:50%;display:none;padding:0;cursor:pointer;font-size:0;line-height:1;align-items:center;justify-content:center}
+#t.n{background:radial-gradient(circle at 35% 30%,#ffd978,var(--sun) 55%,#e39a00);box-shadow:0 0 0 6px rgba(255,184,31,.25)}
+#t.s{background:radial-gradient(circle at 35% 30%,#7ef0e3,var(--tur) 60%,#0b7d73);box-shadow:0 0 0 8px rgba(18,168,154,.3)}
+#t.b{background:radial-gradient(circle at 35% 30%,#ff9a9d,var(--miss) 60%,#a82226);box-shadow:0 0 0 6px rgba(229,72,77,.25)}
+#t.s::after{content:"+3s";font:800 18px 'Unbounded',sans-serif;color:#fff}
+#t.b::after{content:"✕";font:800 26px 'Nunito',sans-serif;color:#fff}
+#t:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;gap:10px;background:var(--card)}
+#ov h2{font-family:'Unbounded',system-ui,sans-serif;font-size:22px;margin:0}
+#ov p{margin:0;color:var(--muted);font-size:15px}
+.legend{display:flex;gap:14px;font-size:14px;color:var(--ink);margin-top:4px;flex-wrap:wrap;justify-content:center}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+button.go,a.go{font:inherit;font-weight:700;font-size:17px;background:var(--tur);color:#fff;border:0;border-radius:14px;padding:13px 26px;cursor:pointer;text-decoration:none;display:inline-block}
+a.go{background:var(--sun);color:#10224a}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+button.go:focus-visible,a.go:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.pop{position:absolute;font-weight:800;pointer-events:none;color:var(--tur);animation:up .7s ease-out forwards;font-size:18px}
+.pop.bad{color:var(--miss)}
+@keyframes up{to{transform:translateY(-38px);opacity:0}}
+footer{margin-top:16px;text-align:center;font-size:14px;color:var(--muted)}
+footer a{color:var(--tur);font-weight:700;text-decoration:none}
+@media (prefers-reduced-motion:reduce){.pop{animation:none;opacity:0}#arena.shake{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Nishonni tut</h1>
+<p class="sub">Tez bos, kombo yig‘, bombadan qoch!</p>
+<div class="bar">
+<div class="stat"><b id="sc">0</b><span>Ball</span></div>
+<div class="stat"><b id="tm">25</b><span>Soniya</span></div>
+<div class="stat"><b id="cb">x1</b><span>Kombo</span></div>
+<div class="stat"><b id="bs">0</b><span>Rekord</span></div>
+</div>
+<div id="arena">
+<button id="t" class="n" aria-label="Nishon"></button>
+<div id="ov">
+<h2 id="ovt">Tayyormisan?</h2>
+<p id="ovp">Nishonlar tez yo‘qoladi va har safar tezlashadi.</p>
+<div class="legend" id="lg">
+<span><i class="dot" style="background:#ffb81f"></i>+1 ball</span>
+<span><i class="dot" style="background:#12a89a"></i>+3 soniya</span>
+<span><i class="dot" style="background:#e5484d"></i>bomba −5</span>
+</div>
+<div class="row"><button class="go" id="go">Boshlash</button><a class="go" id="sh" href="#" target="_blank" rel="noopener" style="display:none">Do‘stlarga yubor</a></div>
+</div>
+</div>
+<footer>Kanalimiz: <a href="https://t.me/USM_15" target="_blank" rel="noopener">@USM_15</a></footer>
+</main>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var arena=$('arena'),t=$('t'),ov=$('ov'),sc=$('sc'),tm=$('tm'),cb=$('cb'),bs=$('bs');
+var score,left,size,life,combo,timer,exp,run=false,best=0;
+try{best=parseInt(localStorage.getItem('usm15best')||'0',10)||0}catch(e){}
+bs.textContent=best;
+function mult(){return Math.min(4,1+Math.floor(combo/5))}
+function setCombo(){cb.textContent='x'+mult()}
+function buzz(n){try{navigator.vibrate&&navigator.vibrate(n)}catch(e){}}
+function pop(x,y,txt,bad){
+var p=document.createElement('div');
+p.className='pop'+(bad?' bad':'');p.textContent=txt;
+p.style.left=Math.max(6,x-14)+'px';p.style.top=y+'px';
+arena.appendChild(p);setTimeout(function(){p.remove()},750);
+}
+function pos(){var r=t.getBoundingClientRect(),a=arena.getBoundingClientRect();return [r.left-a.left+r.width/2,r.top-a.top]}
+function spawn(){
+clearTimeout(exp);
+var r=Math.random(),type=r<0.12?'s':r<0.27?'b':'n';
+var w=arena.clientWidth,h=arena.clientHeight,s=type==='n'?size:Math.max(56,size);
+t.className=type;t.dataset.k=type;
+t.style.width=t.style.height=s+'px';
+t.style.left=Math.random()*(w-s)+'px';
+t.style.top=Math.random()*(h-s)+'px';
+t.style.display='flex';
+exp=setTimeout(function(){
+if(!run)return;
+if(type==='n'){combo=0;setCombo();var p=pos();pop(p[0],p[1],'o‘tkazding',true)}
+spawn();
+},life);
+}
+function start(){
+score=0;left=25;size=84;life=1500;combo=0;run=true;
+sc.textContent=0;tm.textContent=left;setCombo();
+ov.style.display='none';spawn();
+clearInterval(timer);
+timer=setInterval(function(){left--;tm.textContent=Math.max(left,0);if(left<=0)end()},1000);
+}
+function end(){
+run=false;clearInterval(timer);clearTimeout(exp);t.style.display='none';
+var isBest=score>best;
+if(isBest){best=score;bs.textContent=best;try{localStorage.setItem('usm15best',String(best))}catch(e){}}
+var msg=score>=45?'Chaqmoq! Sen haqiqiy ustasan 🔥':score>=30?'Zo‘r natija! 👏':score>=15?'Yomon emas, yana urinib ko‘r.':'Hali oldinda, qayta urin!';
+$('ovt').textContent=score+' ball'+(isBest&&score>0?' · yangi rekord!':'');
+$('ovp').textContent=msg;
+$('lg').style.display='none';
+$('go').textContent='Qayta oʻynash';
+var txt='Men “Nishonni tut” o‘yinida '+score+' ball yig‘dim! Sen yutib ko‘r 🎯';
+$('sh').href='https://t.me/share/url?url='+encodeURIComponent('https://t.me/USM_15')+'&text='+encodeURIComponent(txt);
+$('sh').style.display='inline-block';
+ov.style.display='flex';
+}
+t.addEventListener('pointerdown',function(e){
+if(!run)return;
+e.stopPropagation();
+var k=t.dataset.k,p=pos();
+if(k==='b'){
+score=Math.max(0,score-5);combo=0;sc.textContent=score;setCombo();
+pop(p[0],p[1],'−5',true);buzz(120);
+arena.classList.remove('shake');void arena.offsetWidth;arena.classList.add('shake');
+}else if(k==='s'){
+left+=3;tm.textContent=left;combo++;score+=2*mult();sc.textContent=score;setCombo();
+pop(p[0],p[1],'+3s',false);buzz(20);
+}else{
+combo++;var m=mult();score+=m;sc.textContent=score;setCombo();
+pop(p[0],p[1],'+'+m,false);buzz(15);
+size=Math.max(42,size-2);life=Math.max(650,life-30);
+}
+spawn();
+});
+arena.addEventListener('pointerdown',function(e){
+if(!run||e.target===t)return;
+combo=0;setCombo();
+if(score>0){score--;sc.textContent=score;var r=arena.getBoundingClientRect();pop(e.clientX-r.left,e.clientY-r.top,'−1',true)}
+});
+$('go').addEventListener('click',start);
+})();
+</script>
+</body>
+</html>
